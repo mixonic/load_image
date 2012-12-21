@@ -25,7 +25,13 @@
 
     // Other domains need crossOrigin.
     //
-    if (scannableSrc.indexOf(window.location.host) < 0) {
+    if (
+      (
+        scannableSrc.indexOf('http') == 0 ||
+        scannableSrc.indexOf('//') == 0
+      ) &&
+      scannableSrc.indexOf(window.location.host) < 0
+    ) {
       img.attr('crossOrigin', '');
     }
 

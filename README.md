@@ -4,7 +4,7 @@ handles several quirks:
 
 * Handle cached data. In modern browsers, cached data may not trigger a
 `load` event. We check for that state, and force the load event to fire.
-* Handle CORS. Any image URL not on the `window.location`'s host will
+* Handle CORS. Any image URL not on the `window.location` host will
 have the `crossOrigin` attribute set.
 * Return immediately for data urls.
 
@@ -33,10 +33,10 @@ Contributing
 ------------
 
 Fork, clone, write some code, commit, push, send a pull request. This is
-a quick, young script, and items like CORs may be unreliable across all
+a quick, young script, and items like CORS may be unreliable across all
 browsers. This is due to bugs that don't have known work-arounds yet. So
 lend a hand.
 
 This script is partially based on techniques in: https://github.com/desandro/imagesloaded
 
-This script is licensed under the MIT license.
+This script is licensed under the MIT license. Matthew Beale 2012.
