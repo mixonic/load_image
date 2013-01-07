@@ -27,6 +27,13 @@ var rawImg = new Image();
 $(rawImg).afterImageLoad('http://google.com/foo.png', function(img){
   // `img` is the image wrapped as jQuery.
 });
+
+// There is an optional failure callback
+$.afterImageLoad('http://google.com/foo.png', function(img){
+  // `img` is the image wrapped as jQuery.
+}, function(e){
+  // On failure!
+});
 ```
 
 Contributing
