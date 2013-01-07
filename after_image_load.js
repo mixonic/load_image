@@ -5,18 +5,27 @@
 
   // Provides this syntax:
   //
-  //   $(img).afterImageLoad(someUrl, callback);
+  //   $(img).afterImageLoad(someUrl, successCallback, optionalFailureCallback);
   //
-  $.fn.afterImageLoad = function(newSrc, callback) {
+  $.fn.afterImageLoad = function(newSrc, successCallback, failureCallback) {
 
     var img = this,
+        failureCallback = (failureCallback || function(){}),
         scannableSrc = newSrc.slice(0, 512);
 
     // Data URLs can be considered loaded.
     //
     if (scannableSrc.indexOf('base64') > 0) {
+      var loadedHandler = function(){
+        img.unbind('load', loadedHandler);
+        img.unbind('error', failureCallback);
+        successCallback(img);
+      }
+
+      img.bind('error', failureCallback);
+      img.bind('load', loadedHandler);
+
       img.attr('src', newSrc);
-      callback(img);
 
       // Returns img
       //
@@ -43,10 +52,12 @@
     var loadedHandler = function(){
       if (img.attr('src') != blankImage) {
         img.unbind('load', loadedHandler);
-        callback(img);
+        img.unbind('error', failureCallback);
+        successCallback(img);
       }
     }
 
+    img.bind('error', failureCallback);
     img.bind('load', loadedHandler);
 
     img.attr('src', newSrc);
@@ -63,18 +74,19 @@
 
   // Provides two additional syntaxes:
   //
-  //   $.afterImageLoad(imgEl, someUrl, callback);
-  //   $.afterImageLoad(someUrl, callback);
+  //   $.afterImageLoad(imgEl, someUrl, successCallback, optionalFailureCallback);
+  //   $.afterImageLoad(someUrl, successCallback, optionalFailureCallback);
   //
-  $.afterImageLoad = function(img, newSrc, callback) {
-    if (!callback && $.type(img) == 'string') {
-      var callback = newSrc,
+  $.afterImageLoad = function(img, newSrc, successCallback, failureCallback) {
+    if ($.type(img) == 'string') {
+      var failureCallback = successCallback,
+          successCallback = newSrc,
           newSrc = img,
           img = $('<img />');
     } else {
       var img = $(img);
     }
-    img.afterImageLoad(newSrc, callback);
+    img.afterImageLoad(newSrc, successCallback, failureCallback);
   }
 
 }(jQuery));
