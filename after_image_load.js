@@ -41,7 +41,7 @@
       ) &&
       scannableSrc.indexOf(window.location.host) < 0
     ) {
-      img.attr('crossOrigin', '');
+      img.attr('crossOrigin', 'Anonymous');
     }
 
     // For other requests, attach a handler then
