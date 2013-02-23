@@ -1,8 +1,6 @@
 ;(function($, undefined){
   'use strict';
 
-  var blankImage = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-
   // Provides this syntax:
   //
   //   $(img).afterImageLoad(someUrl, successCallback, optionalFailureCallback);
@@ -45,16 +43,13 @@
     }
 
     // For other requests, attach a handler then
-    // fire the src. If it is cached, quickly swap
-    // it with a blank data-uri to trigger the
-    // onload.
+    // fire the src. If it is cached and loaded,
+    // call the callback by hand.
     //
     var loadedHandler = function(){
-      if (img.attr('src') != blankImage) {
-        img.unbind('load', loadedHandler);
-        img.unbind('error', failureCallback);
-        successCallback(img);
-      }
+      img.unbind('load', loadedHandler);
+      img.unbind('error', failureCallback);
+      successCallback(img);
     }
 
     img.bind('error', failureCallback);
@@ -63,8 +58,7 @@
     img.attr('src', newSrc);
 
     if (img[0].complete || img[0].readyState) {
-      img.attr('src', blankImage);
-      img.attr('src', newSrc);
+      loadedHandler();
     }
 
     // Returns img
