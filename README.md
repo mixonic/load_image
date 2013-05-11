@@ -1,4 +1,4 @@
-**after_image_load** is a small JavaScript library providing a reliable
+**image_load** is a small JavaScript library providing a reliable
 callback after an image is loaded. It is dependent on jQuery. In modern
 browsers, cached data may not trigger a `load` event. We check for that
 state, and immediately resolve the returned promise if the file is
@@ -31,7 +31,7 @@ $.loadImage('http://google.com/foo.png').done(function(img){
 });
 ```
 
-An earlier version of **after_image_load** had built-in support for CORS
+An earlier version of **image_load** had built-in support for CORS
 and special handling of data-urls. This has been removed, but is easy to
 handle in a custom manner:
 
