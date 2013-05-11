@@ -3,22 +3,26 @@
 
   // Provides this syntax:
   //
-  //   $(img).afterImageLoad(someUrl, successCallback, optionalFailureCallback);
+  //   $(img).loadImage(someUrl);
   //
-  $.fn.afterImageLoad = function(newSrc, successCallback, failureCallback) {
-
+  $.fn.loadImage = function(newSrc) {
     var img = this,
-        failureCallback = (failureCallback || function(){}),
-        scannableSrc = newSrc.slice(0, 512);
+        promise = $.Deferred();
 
-    var loadedHandler = function(){
-      img.unbind('load', loadedHandler);
+    var successCallback = function(){
+      img.unbind('load',  successCallback);
       img.unbind('error', failureCallback);
-      successCallback(img);
+      promise.resolve(img);
+    }
+
+    var failureCallback = function(){
+      img.unbind('load',  successCallback);
+      img.unbind('error', failureCallback);
+      promise.reject(img);
     }
 
     img.bind('error', failureCallback);
-    img.bind('load', loadedHandler);
+    img.bind('load',  successCallback);
 
     img.attr('src', newSrc);
 
@@ -26,29 +30,27 @@
     // call the callback by hand.
     //
     if (img[0].complete || img[0].readyState) {
-      loadedHandler();
+      successCallback();
     }
 
-    // Returns img
+    // Return the promise
     //
-    return img;
+    return promise;
   }
 
   // Provides two additional syntaxes:
   //
-  //   $.afterImageLoad(imgEl, someUrl, successCallback, optionalFailureCallback);
-  //   $.afterImageLoad(someUrl, successCallback, optionalFailureCallback);
+  //   $.loadImage(imgEl, someUrl);
+  //   $.loadImage(someUrl);
   //
-  $.afterImageLoad = function(img, newSrc, successCallback, failureCallback) {
-    if ($.type(img) == 'string') {
-      var failureCallback = successCallback,
-          successCallback = newSrc,
-          newSrc = img,
+  $.loadImage = function(img, newSrc) {
+    if ($.type(newSrc) == 'undefined') {
+      var newSrc = img,
           img = $('<img />');
     } else {
       var img = $(img);
     }
-    img.afterImageLoad(newSrc, successCallback, failureCallback);
+    return img.loadImage(newSrc);
   }
 
 }(jQuery));
