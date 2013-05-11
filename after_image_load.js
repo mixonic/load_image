@@ -30,18 +30,6 @@
       return img;
     }
 
-    // Other domains need crossOrigin.
-    //
-    if (
-      (
-        scannableSrc.indexOf('http') == 0 ||
-        scannableSrc.indexOf('//') == 0
-      ) &&
-      scannableSrc.indexOf(window.location.host) < 0
-    ) {
-      img.attr('crossOrigin', 'Anonymous');
-    }
-
     // For other requests, attach a handler then
     // fire the src. If it is cached and loaded,
     // call the callback by hand.
