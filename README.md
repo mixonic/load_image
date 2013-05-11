@@ -1,4 +1,4 @@
-**image_load** is a small JavaScript library providing a reliable
+**load_image** is a small JavaScript library providing a reliable
 callback after an image is loaded. It is dependent on jQuery. In modern
 browsers, cached data may not trigger a `load` event. We check for that
 state, and immediately resolve the returned promise if the file is
@@ -31,7 +31,7 @@ $.loadImage('http://google.com/foo.png').done(function(img){
 });
 ```
 
-An earlier version of **image_load** had built-in support for CORS
+An earlier version of **load_image** had built-in support for CORS
 and special handling of data-urls. This has been removed, but is easy to
 handle in a custom manner:
 
@@ -40,7 +40,7 @@ $('<img crossOrigin="Anonymous" />').loadImage('http://google.com/foo.png').done
   // `foo.png` was requested with CORs headers.
 });
 
-$('<img '+(imgSrc.indexOf('data:') === 0 ? '' : 'crossOrigin="Anonymous" ')+'/>').imageLoad(imgSrc).done(function(img){
+$('<img '+(imgSrc.indexOf('data:') === 0 ? '' : 'crossOrigin="Anonymous" ')+'/>').loadImage(imgSrc).done(function(img){
   // `imgSrc` is requested with CORs headers if it is an image, and
   // without CORs headers if it is a data-url.
 })
