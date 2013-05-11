@@ -11,29 +11,6 @@
         failureCallback = (failureCallback || function(){}),
         scannableSrc = newSrc.slice(0, 512);
 
-    // Data URLs can be considered loaded.
-    //
-    if (scannableSrc.indexOf('base64') > 0) {
-      var loadedHandler = function(){
-        img.unbind('load', loadedHandler);
-        img.unbind('error', failureCallback);
-        successCallback(img);
-      }
-
-      img.bind('error', failureCallback);
-      img.bind('load', loadedHandler);
-
-      img.attr('src', newSrc);
-
-      // Returns img
-      //
-      return img;
-    }
-
-    // For other requests, attach a handler then
-    // fire the src. If it is cached and loaded,
-    // call the callback by hand.
-    //
     var loadedHandler = function(){
       img.unbind('load', loadedHandler);
       img.unbind('error', failureCallback);
@@ -45,6 +22,9 @@
 
     img.attr('src', newSrc);
 
+    // If the url is is cached and loaded,
+    // call the callback by hand.
+    //
     if (img[0].complete || img[0].readyState) {
       loadedHandler();
     }
