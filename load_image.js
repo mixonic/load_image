@@ -30,6 +30,7 @@
     // call the callback by hand.
     //
     if (img[0].complete || img[0].readyState) {
+      img.attr('fromCache', 'true');
       successCallback();
     }
 
